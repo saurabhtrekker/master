@@ -21,8 +21,11 @@ sudo iptables -t nat -A PREROUTING -d 10.5.5.4 -p udp -j DNAT --to-destination 1
 sudo iptables -t nat -A POSTROUTING -s 10.5.3.0/24 -o eth0 -p tcp -j MASQUERADE
 sudo iptables -t nat -A POSTROUTING -s 10.5.4.0/24 -o eth0 -p tcp -j MASQUERADE
 
+# SNAT for outbound & inbound traffic. TODO SNAT only for outbound traffic
 sudo iptables -A FORWARD -i eth0 -p tcp --dport 80 -d 10.5.5.4 -j ACCEPT
 sudo iptables -t nat -A POSTROUTING -d 10.5.3.5 -p tcp -j SNAT --to-source 10.5.5.4
 sudo iptables -t nat -A POSTROUTING -d 10.5.4.5 -p tcp -j SNAT --to-source 10.5.5.4
 
-#sudo iptables -t nat -A POSTROUTING -j MASQUERADE
+# Install iptables-persistent package which makes current iptables rules
+# persistent across reboots.
+sudo apt-get --assume-yes install iptables-persistent
