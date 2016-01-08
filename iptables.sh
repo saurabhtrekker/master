@@ -29,4 +29,6 @@ sudo iptables -t nat -A POSTROUTING -d 10.5.4.5 -p tcp -j SNAT --to-source 10.5.
 # Install iptables-persistent package which makes current iptables rules
 # persistent across reboots.
 export DEBIAN_FRONTEND=noninteractive
+sudo sed -i 's/^mesg n$/tty -s \&\& mesg n/g' /root/.profile
+export TERM=vt100
 sudo apt-get --assume-yes install iptables-persistent
