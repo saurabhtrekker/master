@@ -21,14 +21,14 @@ sudo iptables -t nat -A PREROUTING -d 10.5.5.4 -p udp -j DNAT --to-destination 1
 sudo iptables -t nat -A POSTROUTING -s 10.5.3.0/24 -o eth0 -p tcp -j MASQUERADE
 sudo iptables -t nat -A POSTROUTING -s 10.5.4.0/24 -o eth0 -p tcp -j MASQUERADE
 
-# SNAT for outbound & inbound traffic. TODO SNAT only for outbound traffic
 sudo iptables -A FORWARD -i eth0 -p tcp --dport 80 -d 10.5.5.4 -j ACCEPT
 sudo iptables -t nat -A POSTROUTING -d 10.5.3.5 -p tcp -j SNAT --to-source 10.5.5.4
 sudo iptables -t nat -A POSTROUTING -d 10.5.4.5 -p tcp -j SNAT --to-source 10.5.5.4
 
 # Install iptables-persistent package which makes current iptables rules
 # persistent across reboots.
-export DEBIAN_FRONTEND=noninteractive
-sudo sed -i 's/^mesg n$/tty -s \&\& mesg n/g' /root/.profile
-export TERM=vt100
-sudo apt-get --assume-yes install iptables-persistent
+sudo iptables-save -c > /etc/iptables.rules
+printf "#!/bin/sh \niptables-restore < /etc/iptables.rules\nexit 0\n" > /etc/network/if-pre-up.d/iptablesload
+printf "#!/bin/sh\niptables-save -c > /etc/iptables.rules\nif [ -f /etc/iptables.downrules ]; then\n   iptables-restore < /etc/iptables.downrules\nfi\nexit 0\n" > /etc/network/if-post-down.d/iptablessave
+sudo chmod +x /etc/network/if-post-down.d/iptablessave
+sudo chmod +x /etc/network/if-pre-up.d/iptablesload
