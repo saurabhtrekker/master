@@ -28,4 +28,5 @@ sudo iptables -t nat -A POSTROUTING -d 10.5.4.5 -p tcp -j SNAT --to-source 10.5.
 
 # Install iptables-persistent package which makes current iptables rules
 # persistent across reboots.
+sudo rm -rf /etc/apt/apt.conf.d/*debconf
 sudo apt-get --assume-yes install iptables-persistent
