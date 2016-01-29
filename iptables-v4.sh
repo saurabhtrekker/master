@@ -25,6 +25,9 @@ sudo iptables -A FORWARD -i eth0 -p tcp --dport 80 -d $1.5.4 -j ACCEPT
 sudo iptables -t nat -A POSTROUTING -d $1.3.5 -p tcp -j SNAT --to-source $1.5.4
 sudo iptables -t nat -A POSTROUTING -d $1.4.5 -p tcp -j SNAT --to-source $1.5.4
 
+# MASQUERADE all other outdoing traffic from NAT
+sudo iptables -t nat -A POSTROUTING -j MASQUERADE
+
 # Install iptables-persistent package which makes current iptables rules
 # persistent across reboots.
 sudo iptables-save -c > /etc/iptables.rules
