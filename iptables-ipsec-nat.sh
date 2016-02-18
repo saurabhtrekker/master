@@ -12,17 +12,10 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
  
 # For login to NAT machine using ssh -p 50022
 sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 50022 -j DNAT --to $1.5.4:22
- 
- 
-# for IPSEC
-sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 500 -j DNAT --to $1.1.4
-sudo iptables -t nat -A PREROUTING -i eth0 -p udp --dport 500 -j DNAT --to $1.1.4
-sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 4500 -j DNAT --to $1.1.4
-sudo iptables -t nat -A PREROUTING -i eth0 -p udp --dport 4500 -j DNAT --to $1.1.4
- 
-sudo iptables -t nat -A PREROUTING -i eth0 -p esp -j DNAT --to $1.1.4
- 
-sudo iptables -t nat -A PREROUTING -i eth0 -p ah -j DNAT --to $1.1.4
+
+# DNAT everything else to FW Untrust
+sudo iptables -t nat -A PREROUTING -i eth0 -j DNAT --to $1.1.4
+sudo iptables -A FORWARD -i eth1 -j ACCEPT
  
 # MASQUERADE all other outdoing traffic from NAT
 sudo iptables -t nat -A POSTROUTING -j MASQUERADE
