@@ -28,3 +28,4 @@ printf "#!/bin/sh \niptables-restore < /etc/iptables.rules\nexit 0\n" > /etc/net
 printf "#!/bin/sh\niptables-save -c > /etc/iptables.rules\nif [ -f /etc/iptables.downrules ]; then\n   iptables-restore < /etc/iptables.downrules\nfi\nexit 0\n" > /etc/network/if-post-down.d/iptablessave
 sudo chmod +x /etc/network/if-post-down.d/iptablessave
 sudo chmod +x /etc/network/if-pre-up.d/iptablesload
+
