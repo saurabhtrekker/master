@@ -4,7 +4,7 @@
 publicip=$2
 ipaddr=`ifconfig eth0 | grep inet | awk -F " " '{print $2}' | awk -F ":" '{print $2}' | head -1`
 echo "IP Address of the machine is $ipaddr"
-
-sudo apt-get update
-sudo apt-get install -y mysql-server
-sudo mysql_install_db
+sleep 600
+#sudo apt-get update
+#sudo apt-get install -y mysql-server
+#sudo mysql_install_db
